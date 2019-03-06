@@ -1,0 +1,27 @@
+*{
+    transition: .5s
+}
+.select{
+    cursor: pointer;
+
+}
+.select:hover{
+    background: #F3F3F3
+}
+.select.active{
+    background: #F0F0F0
+}
+.error{color: #F00}
+.hidden{ display:none}
+
+.switchView{
+    cursor: pointer;
+}
+.row{width:100%}
+.card{
+    text-align: center;
+    padding: 15px
+}
+.card > img{
+    margin:15px;
+}

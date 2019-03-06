@@ -1,0 +1,13 @@
+version: '3'
+services:
+  www:
+    container_name: 10074--smsgo
+
+    volumes:
+      - /opt/app/:/opt/app/
+    ports:
+      - '80:80'
+    build:
+      context: .
+
+
