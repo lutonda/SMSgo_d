@@ -1,97 +1,124 @@
+var express = require('express'),
+    path = require('path'),
+    cookieParser=require('cookie-parser'),
+    bodyParser=require('body-parser'),
+    expressHandleBars=require('express-handlebars'),
+    //expressHandlebarsSections = require('express-handlebars-sections'),
+    expressValidador=require('express-validator'),
+    flash=require('connect-flash'),
+    session=require('express-session'),
+    passport=require('passport'),
+    LocalStrategy=require('passport-local').Strategy,
+    mongo=require('mongodb'),
+    mongoose = require('mongoose');
+
+    //mongoose.connect('mongodb://localhost:5000/sms_go');
+    mongoose.connect('mongodb://8a81c110418ad69810a3377fa31124d2:qasw9a.mongo.evennode.com:27017/8a81c110418ad69810a3377fa31124d2');
+    var db=mongoose.connection;
 
 
+// routes
+var routes = require('./routes/index.route'),
+    homeRoute = require('./routes/home.route'),
+    userRoute = require('./routes/users.route'),
+    apiRoute = require('./routes/api.route'),
+    authenticationRoute = require('./routes/authentication.route');
 
-var express = require("express");
-app  = express(),
-port = parseInt(process.env.PORT, 10) || 8080,
-bodyParser = require('body-parser'),
-session = require('express-session'),
-passport = require('passport'),
-LocalStrategy = require('passport-local').Strategy;
+var helpers=require('./helpers/app.helpers');
+// Init App
+var app= express();
+var server = require("http").Server(app);
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.set('port',(process.env.PORT || 3000));
+server.listen(app.get('port'),function(){
+  console.log('Listinig to port '+app.get('port'));
+});
 
+//creating socket server
+var io = require("socket.io")(server);
+
+// View engine
+app.set('views',path.join(__dirname,'views'));
+app.engine('handlebars',expressHandleBars({
+  defaultLayout:'layout',
+  helpers: helpers
+//  section: expressHandlebarsSections()  
+}));
+app.set('view engine','handlebars');
+
+// body parse midlleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(cookieParser());
+
+
+// set Static forlder
+app.use(express.static(path.join(__dirname,'public')));
+
+// Express session
 app.use(session({
-secret:'da illest developer',
-resave: true,
-saveUninitialized: true
+  secret:'secret',
+  saveUninitialized:true,
+  resave:true
 }));
 
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
-//Api
-var Main = require("./api/main.api");
+// express validator
+// : rever validação
+app.use(expressValidador({
+  errorFormatter:function(param,msg,value){
+    var namespace = param.split('.')
+      , root = namespace.shift()
+      , formParam = root;
 
-//Controller
-var Api = require("./controllers/api.controller");
-var Doc = require("./controllers/doc.controller");
-var Demo = require("./controllers/demo.controller");
-var Authentication = require("./controllers/authentication.controller.");
+      while(namespace.length){
+        formParam+='['+ namespace.shift()+']'
+      }
+      return {
+        param: formParam,
+        msg: msg,
+        value: value
+      }
+  }
+}));
 
-// models
-const { User } = require('./models');
-var server = require("http").Server(app);
-server.listen(3000);
+// connect Flash
+app.use(flash());
 
-var io = require("socket.io")(server);
-var path = require("path");
+// global vars
+app.use(function(req,res,next){
+  res.locals.success_msg = req.flash('susses_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
+  res.locals["socketio"] = io;
+  res.locals.url=req.url.split('/')[1] || 'home'
+  res.locals.hostname=req.hostname
+  next();
+})
 
-app.use((req, res, next) => {
-res.locals["socketio"] = io;
-res.locals["User"] = User;
-next();
-});
-
-app.set("view engine", "pug");
-//Store all HTML files in view folder.
-app.use(express.static(path.join(__dirname, "public")));
-
-app.get("/", function(req, res) {
-//res.sendFile(__dirname+'/pages/index.html');
-res.render("index", { title: "Hey", message: "Hello there!" });
-});
-
-app.get("/api", Api.index);
-
-app.get("/about", Doc.index);
-
-app.get("/demo", Demo.index);
-
-app.get("/authentication", Authentication.index);
-
-app.get("/authentication/signin", Authentication.signIn);
-
-app.get("/authentication/signon", Authentication.signOn);
-
-app.get("/demo_1", function(req, res, next) {
-res.sendFile(__dirname + "/index.html", {
-title: "Hey",
-message: "Hello there!"
-});
-});
-
-app.get("/login", function(req, res) {
-//res.sendFile(__dirname+'/pages/index.html');
-res.render("index", { title: "Hey", message: "Hello there!" });
-});
-
-app.get("/project", function(req, res) {
-//res.sendFile(__dirname+'/pages/index.html');
-res.render("index", { title: "Hey", message: "Hello there!" });
-});
-
-app.get("/demo", Api.demo.get);
-app.post("/demo", Api.demo.post);
-
-app.get("/api/v2/sendsms", Main.sendSMS);
+app.use('/',homeRoute);
+app.use('/io',userRoute);
+app.use('/api',apiRoute);
+app.use('/authentication',authenticationRoute);
 
 io.on('connection',function(socket){
-console.log(socket.id);
-socket.on('update',(x)=>{
-    console.log('update');
-    io.emit('update','hello world'+JSON.stringify(x))});
-console.log(socket.id);
-socket.on('new-message',(x)=>{
-    console.log('new-message');
-    io.emit('new-message','hello world '+JSON.stringify(x))});
+
+io.emit('messageSuccess','ola')
+  console.log( new Date()+ ', connected to: '+ socket.id + ' on ' + socket.request.connection.remoteAddress + ' - ' + socket.request.headers['user-agent']);
+  io.emit('refresh-connection',true)
+  socket.on('disconnect', function(){
+    io.emit('refresh-connection',false)
+    console.log(new Date()+ ', disconnected');
+  });
 })
+io.on('*', function(data){
+  console.log(data)
+})
+io.on('messageSuccess',function(data){
+  console.log(data +'ola' )
+})
+

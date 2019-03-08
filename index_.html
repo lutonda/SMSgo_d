@@ -1,0 +1,12 @@
+<h1>Welcomeback</h1>
+
+<button>update</button>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+var socket=io()
+var button=document.querySelector('button')
+button.onclick=function(){
+    console.log('sending update')
+    socket.emit('update')
+}
+</script>

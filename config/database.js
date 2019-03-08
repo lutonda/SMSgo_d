@@ -1,30 +1,6 @@
-/*{
-  "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
-}*/
+
 module.exports = {
-  username: 'dev',
-  password: 'qasw',
-  database: 'sms_go',
-  host: '127.0.0.1',
-  dialect: 'mysql',
+  development: 'mongodb://localhost:5000/sms_go',
+  test_evennode: 'mongodb://8a81c110418ad69810a3377fa31124d2:qasw9a.mongo.evennode.com:27017/8a81c110418ad69810a3377fa31124d2',
+  production: 'nonde'
 }

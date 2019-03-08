@@ -10,9 +10,10 @@ var express = require('express'),
     passport=require('passport'),
     LocalStrategy=require('passport-local').Strategy,
     mongo=require('mongodb'),
+    config=require('./config/database')
     mongoose = require('mongoose');
 
-    mongoose.connect('mongodb://localhost:5000/sms_go');
+    mongoose.connect(config.development);
     var db=mongoose.connection;
 
 
@@ -28,7 +29,7 @@ var helpers=require('./helpers/app.helpers');
 var app= express();
 var server = require("http").Server(app);
 
-app.set('port',(process.env.PORT || 3000));
+app.set('port',(process.env.PORT || 8000));
 server.listen(app.get('port'),function(){
   console.log('Listinig to port '+app.get('port'));
 });
