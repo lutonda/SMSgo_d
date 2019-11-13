@@ -13,7 +13,7 @@ var express = require('express'),
     config=require('./config/database')
     mongoose = require('mongoose');
 
-    mongoose.connect(config.development);
+    mongoose.connect(config.test_evennode);
     var db=mongoose.connection;
 
 
@@ -29,7 +29,7 @@ var helpers=require('./helpers/app.helpers');
 var app= express();
 var server = require("http").Server(app);
 
-app.set('port',(process.env.PORT || 8000));
+app.set('port',(process.env.PORT || 8800));
 server.listen(app.get('port'),function(){
   console.log('Listinig to port '+app.get('port'));
 });

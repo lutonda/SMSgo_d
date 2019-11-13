@@ -24,7 +24,7 @@ exports.signOn = {
           console.log(user);
           user.emails=[user.email]
           user.subject='You SMSgo Account👻'
-          user.activationUrl=req.protocol+'://'+req.hostname+':3000/authentication/activateacout/_d?_uJujkKey_bb='+user.apikey+'&980k=_22'
+          user.activationUrl=req.protocol+'://'+req.hostname+'/authentication/activateacout/_d?_uJujkKey_bb='+user.apikey+'&980k=_22'
           Mailer.send(user);
           req.flash("success_msg", "You are registered and can you now login");
           res.redirect("/");

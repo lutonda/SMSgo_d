@@ -1,10 +1,10 @@
-<div class="row" style="margin-top:100px; width:100%">
+<div class="row" style="margin-top:50px; width:100%">
     <div class="col-md-3">
-        <img src="/img/avatar.png" alt="..." class="img-thumbnail float-left">
+        <img src="/img/avatar.png" alt="..." class="img-thumbnail float-left hide-on-mobile">
     </div>
-    <div class="col-md-9" style="background: #efefef; padding:50px">
+    <div class="col-md-9" style="background: #efefef; padding:2%">
         <h3>Your APIKEY</h3>
-        <h5>{{user.apikey}}</h5>
+        <h5 class="text-mobile">{{user.apikey}}</h5>
         <hr>
         <h3></h3>
         <div class="row">
@@ -41,25 +41,32 @@
         </div>
     </div>
     {{else}}
+    <div class="col col-md-8 col-sm-12">
     <form method="POST" id="sendmessageform" action="/io/{{user.name}}/apijob">
-        <div class="row">
+        
+            <div class="row">
             {{#each user.stations}}
-            <div class="col-md-2 radio text-center">
+            <div class="col-md-2 col-sm-3 col-xs-3 radio text-center">
                 <label for="_key_{{key}}" class="select"><img src="/img/smartphone.png" style="width: 98%">
                 <input type="radio" name="station" id="_key_{{key}}" value="{{key}}" class="hidden"><span style="font-size: 18px">{{key}} | {{ phoneNumber }}| </span> <i class="fab fa-android fa-2x"></i></label>
             </div>
             {{/each}}
         </div>
-        <div class="form-group"><label for="to"> Recipient phone number:</label>
-            <input class="form-control" id="to" type="number" autocomplete="no" placeholder="Please, type your best E-mail" name="to"
-                autocomplete='no' /></div>
-        <div class="form-group"><label for="name">Your message:</label>
-            <textarea class="form-control" id="message" type="password" name="message"></textarea>
-        </div>
-        <div class="row">
-            <div class="col-md-4 text-left"><button class="btn btn-lg btn-primary" type="submit">Send</button></div>
-            <div class="col-md-8 text-right"><span>Or just Sign In if you are not new here</span></div>
+            <div class="form-group"><label for="to"> Recipient phone number:</label>
+                <input class="form-control" id="to" type="number" autocomplete="no" placeholder="Please, type your best E-mail" name="to"
+                    autocomplete='no' /></div>
+            <div class="form-group"><label for="name">Your message:</label>
+                <textarea class="form-control" id="message" type="password" name="message"></textarea>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-left"><button class="btn btn-lg btn-primary" type="submit">Send</button></div>
+                <div class="col-md-8 text-right"><span>Or just Sign In if you are not new here</span></div>
+            </div>
         </div>
     </form>
+        <div class="col col-md-4 col-sm-12 hide-on-mobile">
+            <img src="{{userQr}}" class="img-thumbnail" style="width:100%"/>
+        </div>
+        </div>
     {{/if}}
 </div>

@@ -17,7 +17,10 @@
 .switchView{
     cursor: pointer;
 }
-.row{width:100%}
+.row{
+    width:100%;
+    margin-left: 0;
+}
 .card{
     text-align: center;
     padding: 15px
@@ -25,3 +28,41 @@
 .card > img{
     margin:15px;
 }
+
+ div.row.ensures-container h3{
+    padding: 15px;
+    height: 120px;
+}
+
+ div.row.ensures-container i.fa{
+    margin:15px 0;
+}
+
+ div.row.ensures-container span{
+    margin: 0 15px;
+}
+
+ div.row.ensures-container div.col-md-3{
+    border:solid 1px #ddd;
+    padding:5px
+}
+.signIn, .signOn{
+    margin-top:50px
+}
+.img-thumbnail{width: 100%;}
+
+
+
+@media screen and (max-width: 600px) {
+    .hide-on-mobile {
+      visibility: hidden;
+      clear: both;
+      float: left;
+      margin: 10px auto 5px 20px;
+      width: 28%;
+      display: none;
+    }
+    .text-mobile{
+        font-size: 10px
+    }
+  }
