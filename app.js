@@ -13,7 +13,7 @@ var express = require('express'),
     config=require('./config/database')
     mongoose = require('mongoose');
 
-    mongoose.connect(config.test_evennode);
+    mongoose.connect(config.development);
     var db=mongoose.connection;
 
 
