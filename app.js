@@ -9,13 +9,17 @@ var express = require('express'),
     session=require('express-session'),
     passport=require('passport'),
     LocalStrategy=require('passport-local').Strategy,
+    GitHubStrategy = require('passport-github').Strategy,
     mongo=require('mongodb'),
     config=require('./config/database')
     mongoose = require('mongoose');
 
+var User = require("./models/user");
+
     mongoose.connect(config.development);
     var db=mongoose.connection;
-
+var GITHUB_CLIENT_ID='332445fb159186fe0cfa';
+var GITHUB_CLIENT_SECRET='b862f87fee8a498c7975627391a5810077a800ef';
 
 // routes
 var routes = require('./routes/index.route'),
@@ -104,6 +108,44 @@ app.use('/',homeRoute);
 app.use('/io',userRoute);
 app.use('/api',apiRoute);
 app.use('/authentication',authenticationRoute);
+
+app.get('/authentication/github',
+  passport.authenticate('github'));
+
+app.get('/authentication/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/io');
+  });
+
+passport.use(new GitHubStrategy({
+    clientID: GITHUB_CLIENT_ID,
+    clientSecret: GITHUB_CLIENT_SECRET,
+    callbackURL: "https://8800-f85b6da7-84a4-4ddf-84f8-73caeca145d8.ws-eu01.gitpod.io/authentication/github/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+        var newUser=new User(
+            {
+                email:profile.emails[0].value,
+                name:profile.displayName,
+                username:profile.username,
+                password:Math.random().toString(36).substring(7),
+                isActive:true
+            });
+    User.findOne({email:newUser.email},(err,user)=>{
+        console.log(newUser);
+      if(err)throw err;
+      if(user){
+        return cb(err, user);
+      }
+      else
+        user=User.create(newUser, function(err, user) {
+          return cb(err, user);
+      });       
+    })
+  }
+));
 
 io.on('connection',function(socket){
 
