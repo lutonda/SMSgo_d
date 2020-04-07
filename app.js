@@ -118,24 +118,27 @@ app.get('/authentication/github/callback',
 
 
 io.on('connection',function(socket){
+    
+  console.log('>>>'+ (new Date()).toJSON().slice(0,10).replace(/-/g,'/')+ ': a user connected to: '+ socket.id + ' on ' + socket.request.connection.remoteAddress + ' - ' + socket.request.headers['user-agent']);
 
-io.emit('messageSuccess','ola')
-  console.log( new Date()+ ', connected to: '+ socket.id + ' on ' + socket.request.connection.remoteAddress + ' - ' + socket.request.headers['user-agent']);
+  socket.on('pairedevice', function(){
+    console.log('>>>------------------------->paire device event called')
+    //console.log(data)
+  })
+  //receber mensagem
+  socket.on('chat message', function(msg){
+    console.log('>>>message: ' + msg.apikey);
+  });
+//enviar mensagem
+io.emit('message','ola')
   io.emit('refresh-connection',true)
   socket.on('disconnect', function(){
     io.emit('refresh-connection',false)
     console.log(new Date()+ ', disconnected');
   });
-})
-io.on('*', function(data){
-    console.log('------------------------->new event')
-  console.log(data)
+  
 })
 
-io.on('paire_device', function(data){
-   console.log('------------------------->new event')
-   console.log(data)
-})
 io.on('messageSuccess',function(data){
   console.log(data +'ola' )
 })
