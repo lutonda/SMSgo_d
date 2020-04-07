@@ -1,10 +1,6 @@
 var User = require('../models/user');
 var Station = require('../models/station');
 exports.send = async function(data,callback) {
-  console.log(1)
-  
-  console.log(data.fn)
-  console.log(data)
   
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
@@ -20,7 +16,8 @@ exports.send = async function(data,callback) {
                 callback({
                     status: 200,
                     message: "Station created",
-                    station: station
+                    station: station,
+                    id:station.phoneNumber
                 })
             });
             } else 

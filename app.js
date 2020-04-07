@@ -123,14 +123,11 @@ io.on('connection',function(socket){
 
   //receber conncção
   socket.on('send', function(data){
-        console.log('>>>------------------------->paire device event called')
       SocketSrv.send(data,function(data){
-        //io.emit('return',data)
-        console.log('>>>------------------------->RETURN:'+data.status)
-
+        io.emit('refresh-connection-'+data.id,data)
+        console.log('>>>------------------------->RETURN: '+'refresh-connection-'+data.id)
       });
       
-    console.log('>>>------------------------->paire device event called')
     //console.log(data)
   })
   io.emit('message','ola')
