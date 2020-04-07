@@ -20,7 +20,7 @@ var User = require("./models/user");
     var db=mongoose.connection;
 var GITHUB_CLIENT_ID='332445fb159186fe0cfa';
 var GITHUB_CLIENT_SECRET='b862f87fee8a498c7975627391a5810077a800ef';
-
+var CALLBACK_URL= "https://8800-a6d0d9e8-c7c3-4a20-b6f8-5d76d853a2ab.ws-eu01.gitpod.io/authentication/github/callback";
 // routes
 var routes = require('./routes/index.route'),
     homeRoute = require('./routes/home.route'),
@@ -122,7 +122,7 @@ app.get('/authentication/github/callback',
 passport.use(new GitHubStrategy({
     clientID: GITHUB_CLIENT_ID,
     clientSecret: GITHUB_CLIENT_SECRET,
-    callbackURL: "https://8800-f85b6da7-84a4-4ddf-84f8-73caeca145d8.ws-eu01.gitpod.io/authentication/github/callback"
+    callbackURL: CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, cb) {
         var newUser=new User(
