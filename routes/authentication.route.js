@@ -55,9 +55,8 @@ passport.use(new GitHubStrategy({
                 isActive:true,
                 avatar:profile.photos[0].value
             });
-            
+
     User.findOne({email:newUser.email},(err,user)=>{
-        console.log(newUser);
       if(err)throw err;
       if(user){
         return cb(err, user);

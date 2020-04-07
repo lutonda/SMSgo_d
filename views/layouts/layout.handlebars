@@ -115,7 +115,13 @@
     <script src="/js/parallax.min.js"></script>
     <script src="/js/mail-script.js"></script>
     <script src="/js/main.js"></script>
-
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    $(function () {
+        socket = io();
+        socket.emit('chat message', 'we start');
+    });
+    </script>
     <script async="" src="/js/js(1)"></script>
     {{{_sections.scripts}}}
     <script>

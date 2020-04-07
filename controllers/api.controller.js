@@ -88,7 +88,7 @@ exports.stationSendsms = function(req, res) {
             
             res.json({
               status: 200,
-              message: "Success, Message sant",
+              message: "Success, Message sent",
             });
 
           }
