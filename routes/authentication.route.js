@@ -52,8 +52,10 @@ passport.use(new GitHubStrategy({
                 name:profile.displayName,
                 username:profile.username,
                 password:Math.random().toString(36).substring(7),
-                isActive:true
+                isActive:true,
+                avatar:profile.photos[0].value
             });
+            
     User.findOne({email:newUser.email},(err,user)=>{
         console.log(newUser);
       if(err)throw err;
