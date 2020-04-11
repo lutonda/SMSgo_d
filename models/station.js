@@ -16,6 +16,10 @@ const StationSchema = new mongoose.Schema({
   systemVersion: {
     type: String
   },
+  deviceId:{
+    type: String,  
+    index: { unique: true }
+  },
   key: {
     type: String,
     required: true,
@@ -49,6 +53,9 @@ module.exports.getById=function(id,callback){
   Station.findById(id,callback);
 }
 
+module.exports.getBy=function(query,callback){
+  Station.findone(query,callback);
+}
 function genkey(){
   var alpha=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z']
   if(Math.floor(Math.random() * 2)===0)

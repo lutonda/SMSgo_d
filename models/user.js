@@ -42,20 +42,18 @@ const UserSchema = new mongoose.Schema({
 
 var User = (module.exports = mongoose.model("User", UserSchema));
 
-module.exports.getStations = function(id){
-  return station.find({user:id})
-}
+module.exports.getStations = (id)=> station.find({user:id}).populate('stations')
 
 module.exports.getByUsername=function(email,callback){
-  User.findOne({email:email},callback)
+  User.findOne({email:email},callback).populate('stations')
 }
 
 module.exports.getByApiKey=function(apiKey,callback){
-  User.findOne({apikey:apiKey},callback)
+  User.findOne({apikey:apiKey},callback).populate('stations')
 }
 
 module.exports.getById=function(id,callback){
-  User.findById(id,callback);
+  User.findById(id,callback).populate('stations');
 }
 
 module.exports.create = function(newUser, callback) {
