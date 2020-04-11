@@ -7,14 +7,17 @@ exports.index = function(req, res, next) {
 
 exports.stationAutehenticateByEmail = function(req, res, next) {
   var response = {};
-
+    console.log('-------------------------------------method reached')
   User.getByUsername(req.body.email, function(err, user) {
     if (err) throw err;
-    if (!user)
+    if (!user){
+
+      res.status(401)
       res.json({
-        status: 401,
-        message: "Unknow user"
+        status:401,
+        message: "Unknow user "+req.body.email
       });
+    }
     else
       User.comparePassword(req.body.password, user.password, function(
         err,
@@ -26,15 +29,18 @@ exports.stationAutehenticateByEmail = function(req, res, next) {
           station.user = user;
           Station.create(station, function(err, station) {
             if (err) throw err;
+            res.status(200)
             res.json({
-              status: 200,
+              status:200,
               message: "Welcome to RESTHub crafted with love!",
-              station: station
+              station: station,
+              token:Math.floor((Math.random() * 100000) + 1)
             });
           });
         } else {
+          res.status(403)
           res.json({
-            status: 401,
+            status:403,
             message: "wrong password"
           });
         }
