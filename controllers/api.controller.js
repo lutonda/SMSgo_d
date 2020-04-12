@@ -26,16 +26,18 @@ exports.stationAutehenticateByEmail = function (req, res, next) {
                 if (isMacth) {
                     var station = await Station.findOne({ user: user.id, deviceId: req.body.station.deviceId });
 
-                    station.user = user;
                     if (!station)
                         try {
                             station = new Station(req.body.station);
+
+                            station.user = user;
                             station = await Station.create(station);
                             station.user = user;
                         } catch (error) {
                             throw error;
                         }
 
+                    station.user = user;
                     res.status(200)
                     res.json({
                         status: 200,
@@ -56,19 +58,29 @@ exports.stationAutehenticateByEmail = function (req, res, next) {
 
 exports.stationAutehenticateByApiKey = function (req, res, next) {
     var response = {};
-
-    User.getByApiKey(req.body.apiKey, function (err, user) {
+    console.log(res.body)
+    User.getByApiKey(req.body.apiKey, async function (err, user) {
+        
         if (err) throw err;
         if (user) {
-            var station = new Station(req.body.station);
+            var station = await Station.findOne({ user: user.id, deviceId: req.body.station.deviceId });
+            if (!station)
+                try {
+                    station = new Station(req.body.station);
+                    
+                    station.user = user;
+                    station = await Station.create(station);
+                    station.user = user;
+                } catch (error) {
+                    throw error;
+                }
             station.user = user;
-            Station.create(station, function (err, station) {
-                if (err) throw err;
-                res.json({
-                    status: 200,
-                    message: "Welcome to RESTHub crafted with love!",
-                    station: station
-                });
+            res.status(200)
+            res.json({
+                status: 200,
+                message: "Welcome to RESTHub crafted with love!",
+                station: station,
+                token: Math.floor((Math.random() * 100000) + 1)
             });
         } else {
             res.json({

@@ -18,7 +18,7 @@ const StationSchema = new mongoose.Schema({
   },
   deviceId:{
     type: String,  
-    index: { unique: true }
+   // index: { unique: true }
   },
   key: {
     type: String,

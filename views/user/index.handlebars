@@ -48,7 +48,7 @@
             {{#each user.stations}}
             <div class="col-md-2 col-sm-3 col-xs-3 radio text-center">
                 <label for="_key_{{key}}" class="select"><img src="/img/smartphone.png" style="width: 98%">
-                <input type="radio" name="station" id="_key_{{key}}" value="{{id}}" class="hidden"><span style="font-size: 18px">{{key}} | {{ phoneNumber }}| </span> <i class="fab fa-android fa-2x"></i></label>
+                <input type="radio" name="station" id="_key_{{key}}" value="{{deviceId}}" class="hidden"><span style="font-size: 18px">{{key}} | {{ phoneNumber }}| </span> <i class="fab fa-android fa-2x"></i></label>
             </div>
             {{/each}}
         </div>

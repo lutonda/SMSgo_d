@@ -11,7 +11,7 @@ var User = require("../models/user");
 
 var GITHUB_CLIENT_ID='332445fb159186fe0cfa';
 var GITHUB_CLIENT_SECRET='b862f87fee8a498c7975627391a5810077a800ef';
-var CALLBACK_URL= "https://8800-a6d0d9e8-c7c3-4a20-b6f8-5d76d853a2ab.ws-eu01.gitpod.io/authentication/github/callback";
+var CALLBACK_URL= "https://8800-eeda9109-8894-49f8-b0e8-8f9132c4c972.ws-eu01.gitpod.io/authentication/github/callback";
 
 passport.use(new LocalStrategy(function(email,password,done){
   User.getByUsername(email,function(err,user){

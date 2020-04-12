@@ -20,8 +20,8 @@ exports.api =  function(req, res) {
   
 exports.job =  function(req, res) {
     const io = res.locals["socketio"];
-    console.log('connection-'+req.body.station);
-    io.emit('connection-'+req.body.station, req.body);
+    console.log('connction-send-sms-'+req.body.station);
+    io.emit('connction-send-sms-'+req.body.station, req.body);
     res.redirect('./')
 }
     
