@@ -8,6 +8,7 @@ exports.index = function(req, res) {
     Station.getByUser(req.user.id,function(err,stations){
         req.user.stations=stations
         qrcode.toDataURL(req.user.apikey).then(qrc => { 
+            console.log({stations:stations,userQr:qrc})
             res.render('user/index',{stations:stations.length===0,userQr:qrc})
         })
     })

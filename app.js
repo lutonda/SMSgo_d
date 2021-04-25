@@ -15,8 +15,10 @@ var express = require('express'),
 var SocketSrv = require("./app/Socket.service");
 var User = require("./models/user");
 
-    mongoose.connect(config.development);
-var db=mongoose.connection;
+var expressLayouts = require('express-ejs-layouts');
+
+    mongoose.connect(config.development,{ useNewUrlParser: true } );
+//var db=mongoose.connection;
 
 // routes
 var routes = require('./routes/index.route'),
@@ -39,14 +41,16 @@ server.listen(app.get('port'),function(){
 var io = require("socket.io")(server);
 
 // View engine
-app.set('views',path.join(__dirname,'views'));
-app.engine('handlebars',expressHandleBars({
+app.set('views',path.join(__dirname,'views/ejs/'));
+/*app.engine('handlebars',expressHandleBars({
   defaultLayout:'layout',
   helpers: helpers
 //  section: expressHandlebarsSections()  
-}));
-app.set('view engine','handlebars');
+}));*/
+app.set('view engine','ejs');
+app.use(expressLayouts);
 
+app.set('layout', './layouts/layout')
 // body parse midlleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -119,6 +123,7 @@ app.get('/authentication/github/callback',
 
 io.on('connection',function(socket){
     
+  
   console.log('>>>'+ (new Date()).toJSON().slice(0,10).replace(/-/g,'/')+ ': a user connected to: '+ socket.id + ' on ' + socket.request.connection.remoteAddress + ' - ' + socket.request.headers['user-agent']);
 
   //receber conncção
@@ -130,13 +135,9 @@ io.on('connection',function(socket){
       
     //console.log(data)
   })
-  io.emit('message','ola')
+  io.emit('connect','ola')
   //receber mensagem
-  socket.on('chat message', function(msg){
-    console.log('>>>message: ' + msg.apikey);
-  });
-  //enviar mensagem
-  io.emit('message','ola')
+  
   io.emit('refresh-connection',true)
   socket.on('disconnect', function(){
     io.emit('refresh-connection',false)
