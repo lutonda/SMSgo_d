@@ -11,11 +11,11 @@ exports.send = async function(options,callback) {
   var hbsOptions = {
     viewEngine: {
         extname: '.hbs',
-        layoutsDir: 'views/email/',
+        layoutsDir: 'views/email/handlebars/',
         defaultLayout : 'layout.main.hbs',
         partialsDir : 'public/'
     },
-    viewPath: 'views/email/',
+    viewPath: 'views/email/handlebars/',
     extName: '.hbs'
 };
 
@@ -43,7 +43,8 @@ exports.send = async function(options,callback) {
   transporter.use('compile', hbs(hbsOptions));
 
   let info = await transporter.sendMail(mailOptions, function (err, response) {
-    if(err) throw err
+    if(err) 
+    console.error(err);
     transporter.close();
     })
 };
