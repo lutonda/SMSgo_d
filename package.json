@@ -40,7 +40,7 @@
     "socket.io": "^2.4.1",
     "socket.io-client": "^2.2.0",
     "uuid": "^3.3.2",
-    "yarn": "^1.13.0"
+    "yarn": "^1.22.0"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
